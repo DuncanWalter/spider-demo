@@ -1,12 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from 'react'
+import { render } from 'react-dom'
+import { Stopwatch } from './StopWatch'
+import { dispatch } from './store'
+import { stopwatchTimes, startTimes, paused$ } from './slices'
+import './effects'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import classNames from 'classnames'
+import styles from './index.css'
+import { startTimer, pauseTimer, resetTimer } from './actions'
+const { row, root } = styles
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();
+render(
+  <div className={classNames(row, root)}>
+    <Stopwatch
+      stopwatchTimes={stopwatchTimes}
+      paused$={paused$}
+      startTimes={startTimes}
+      start={currentTime => dispatch(startTimer(currentTime))}
+      stop={(startTime, currentTime) =>
+        dispatch(pauseTimer(startTime, currentTime))
+      }
+      reset={() => dispatch(resetTimer())}
+    />
+  </div>,
+  document.getElementById('anchor')!,
+)
