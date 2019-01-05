@@ -1,55 +1,54 @@
 import * as React from 'react'
-import { Slice } from '@dwalter/spider-store'
-import { useSlice } from '@dwalter/spider-hook'
 import styles from './index.css'
-import watchStyles from './WatchFace.css'
 import classNames from 'classnames'
 
 interface WatchFaceProps {
-  stopwatchTimes: Slice<number>
-  paused$: Slice<boolean>
+  stopwatchTime: number
+  paused: boolean
   children: any
 }
 
-export function WatchFace({
-  stopwatchTimes,
-  paused$,
-  children,
-}: WatchFaceProps) {
-  const milliseconds = useSlice(stopwatchTimes)
-  const paused = useSlice(paused$)
+export function WatchFace({ stopwatchTime, paused, children }: WatchFaceProps) {
   return (
     <div>
-      <div
-        className={classNames(
-          styles.centerPoint,
-          paused ? styles.animated : null,
-        )}
-        style={{ transform: `rotate(${toRadians(milliseconds / 1100)}rad)` }}
-      >
-        <div className={watchStyles.bigBall} />
-      </div>
-      <div
-        className={classNames(
-          styles.centerPoint,
-          paused ? styles.animated : null,
-        )}
-        style={{ transform: `rotate(${toRadians(milliseconds / 1750)}rad)` }}
-      >
-        <div className={watchStyles.mediumBall} />
-      </div>
-      <div
-        className={classNames(
-          styles.centerPoint,
-          paused ? styles.animated : null,
-        )}
-        style={{ transform: `rotate(${toRadians(milliseconds / 2760)}rad)` }}
-      >
-        <div className={watchStyles.smallBall} />
-      </div>
+      <Ball
+        paused={paused}
+        style={styles.bigBall}
+        radians={toRadians(stopwatchTime / 1100)}
+      />
+      <Ball
+        paused={paused}
+        style={styles.smallBall}
+        radians={toRadians(stopwatchTime / 2760)}
+      />
+      <Ball
+        paused={paused}
+        style={styles.mediumBall}
+        radians={toRadians(stopwatchTime / 1750)}
+      />
       <div className={styles.centerPoint}>
         <div className={styles.watchFace}>{children}</div>
       </div>
+    </div>
+  )
+}
+
+interface BallProps {
+  style: string
+  radians: number
+  paused: boolean
+}
+
+function Ball({ style, radians, paused }: BallProps) {
+  return (
+    <div
+      className={classNames(
+        styles.centerPoint,
+        paused ? styles.animated : null,
+      )}
+      style={{ transform: `rotate(${radians}rad)` }}
+    >
+      <div className={style} />
     </div>
   )
 }

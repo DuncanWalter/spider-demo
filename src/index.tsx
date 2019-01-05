@@ -1,27 +1,12 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { Stopwatch } from './StopWatch'
-import { dispatch } from './store'
-import { stopwatchTimes, startTimes, paused$ } from './slices'
-import './effects'
 
-import classNames from 'classnames'
-import styles from './index.css'
-import { startTimer, pauseTimer, resetTimer } from './actions'
-const { row, root } = styles
+import { SpiderRoot } from '@dwalter/spider-hook'
+import { App } from './App'
 
 render(
-  <div className={classNames(row, root)}>
-    <Stopwatch
-      stopwatchTimes={stopwatchTimes}
-      paused$={paused$}
-      startTimes={startTimes}
-      start={currentTime => dispatch(startTimer(currentTime))}
-      stop={(startTime, currentTime) =>
-        dispatch(pauseTimer(startTime, currentTime))
-      }
-      reset={() => dispatch(resetTimer())}
-    />
-  </div>,
+  <SpiderRoot>
+    <App />
+  </SpiderRoot>,
   document.getElementById('anchor')!,
 )
